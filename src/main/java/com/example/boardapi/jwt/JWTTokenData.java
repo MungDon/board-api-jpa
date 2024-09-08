@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 @Data
 @AllArgsConstructor
-public class JwtTokenData {
+public class JWTTokenData {
 
     private String grantType;       //jwt 인증 타입
 
