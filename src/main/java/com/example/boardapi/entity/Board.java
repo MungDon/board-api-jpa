@@ -1,12 +1,14 @@
 package com.example.boardapi.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @NoArgsConstructor
 @SuperBuilder
+@Getter
 @Table(name = "tb_board")// 데이터베이스 테이블 명 설정
 public class Board extends BaseTimeEntity{
 

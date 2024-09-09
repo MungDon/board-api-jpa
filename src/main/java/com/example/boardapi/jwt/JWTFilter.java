@@ -1,5 +1,6 @@
 package com.example.boardapi.jwt;
 
+import com.example.boardapi.entity.Token;
 import com.example.boardapi.enums.TokenType;
 import com.example.boardapi.exception.CustomException;
 import com.example.boardapi.exception.ErrorCode;
@@ -43,9 +44,14 @@ public class JWTFilter extends OncePerRequestFilter {
         log.info("refreshToken : {}",refreshToken);
 
         if(jwtUtil.isTokenExpired(refreshToken, TokenType.REFRESH_TOKEN.getTokenType())){
+            log.info("리프레쉬 토큰 만료");
             throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         }
-        // TODO -- (2024.09.08)리프레쉬 토큰이 있는상황 = DB 에 있는 해당 사용자의 refresh Token 값과 비교후 AccessToken 재발급 로직 추가 예정
+        Token token = jwtService.validateAndRenewToken(request,response,accessToken,refreshToken);
+        
+        // UserDetail 회원 정보 저장
+        
+
     }
 
     // 토큰(쿠키) 유효성 검사
