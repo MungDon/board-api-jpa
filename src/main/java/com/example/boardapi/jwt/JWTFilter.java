@@ -4,6 +4,7 @@ import com.example.boardapi.entity.Token;
 import com.example.boardapi.enums.TokenType;
 import com.example.boardapi.exception.CustomException;
 import com.example.boardapi.exception.ErrorCode;
+import com.example.boardapi.user.CustomUserDetail;
 import com.example.boardapi.util.CommonUtils;
 import com.example.boardapi.util.CookieUtils;
 import jakarta.servlet.FilterChain;
@@ -12,6 +13,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -50,8 +54,16 @@ public class JWTFilter extends OncePerRequestFilter {
         Token token = jwtService.validateAndRenewToken(request,response,accessToken,refreshToken);
         
         // UserDetail 회원 정보 저장
+        CustomUserDetail customUserDetail = new CustomUserDetail(token.getMember());
         
+        // Spring Security AuthToken 생성
+        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetail,accessToken,customUserDetail.getAuthorities());
+        
+        // 해당 인증정보를 SecurityContext 에 저장 => 안하면 인증정보 못씀
+        SecurityContextHolder.getContext().setAuthentication(authToken);
 
+        filterChain.doFilter(request, response);
+        log.info("JWTFilter 마무리");
     }
 
     // 토큰(쿠키) 유효성 검사

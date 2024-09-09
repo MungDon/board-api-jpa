@@ -27,20 +27,3 @@ public class Token {
     private LocalDateTime refreshExpireTime;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

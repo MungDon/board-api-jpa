@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface JWTRepository extends JpaRepository<Token,String> {
 
+    Token findByMemberSid(Long memberSid);
+
     @Query("SELECT T FROM Token T JOIN FETCH T.member WHERE T.refreshToken = :refreshToken")
     Optional<Token> findByRefreshToken(String refreshToken);
 }

@@ -3,9 +3,12 @@ package com.example.boardapi.jwt;
 import com.example.boardapi.entity.Member;
 import com.example.boardapi.entity.Token;
 import com.example.boardapi.enums.TokenExpire;
+import com.example.boardapi.enums.TokenType;
 import com.example.boardapi.exception.CustomException;
 import com.example.boardapi.exception.ErrorCode;
 import com.example.boardapi.repository.JWTRepository;
+import com.example.boardapi.repository.MemberRepository;
+import com.example.boardapi.user.CustomUserDetail;
 import com.example.boardapi.util.CommonUtils;
 import com.example.boardapi.util.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +25,7 @@ public class JWTService {
 
     private final JWTUtil jwtUtil;
     private final JWTRepository jwtRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public Token validateAndRenewToken(HttpServletRequest req, HttpServletResponse res, String accessToken, String refreshToken){
@@ -34,6 +38,17 @@ public class JWTService {
             return renewToken;
         }
         // 만료되지 않았다면 현재 토큰 반환
+        return token;
+    }
+
+    @Transactional
+    public Token getOrCreateToken(HttpServletRequest req, HttpServletResponse res,CustomUserDetail principal){
+        Member member = memberRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Token token = jwtRepository.findByMemberSid(member.getMemberSid());
+        if(CommonUtils.isEmpty(token)||jwtUtil.isTokenExpired(token.getRefreshToken(), TokenType.REFRESH_TOKEN.getTokenType())){
+            return renewToken(req, res, member);
+        }
         return token;
     }
 
