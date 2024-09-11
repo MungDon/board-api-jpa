@@ -31,11 +31,20 @@ public class CommonUtils {
         }
         return false;
     }
-    public static ResComResult successResponse(Long sid,String message, ErrorCode errorCode){
+    /*반환할 객체 없는 응답 객체 생성*/
+    public static ResComResult successResponseNoData(Long sid,String message, ErrorCode errorCode){
         if(isEmpty(sid)){
             throw new CustomException(errorCode);
         }
         return ResComResult.builder().success(true).message(message).statusCode(200).build();
+    }
+
+    /*반환할 객체 있는 응답 객체 생성*/
+    public static ResComResult successResponseHasData(Long sid,String message, ErrorCode errorCode,Object data){
+        if(isEmpty(sid)){
+            throw new CustomException(errorCode);
+        }
+        return ResComResult.builder().success(true).message(message).statusCode(200).data(data).build();
     }
     
     /* 토큰 유효 시간을 LocalDateTime 으로 변환*/
@@ -50,4 +59,10 @@ public class CommonUtils {
         return LocalDateTime.ofInstant(expiryInstant, ZoneId.systemDefault());
     }
 
+    /*조건문에 따라 예외 발생*/
+    public static void throwCustomExceptionIf(boolean conditionalStatement, ErrorCode errorCode) {
+        if(conditionalStatement) {
+            throw new CustomException(errorCode);
+        }
+    }
 }

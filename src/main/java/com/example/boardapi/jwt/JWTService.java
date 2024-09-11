@@ -71,4 +71,11 @@ public class JWTService {
         CookieUtils.reissueTokenCookie(req,res,accessToken,refreshToken);
         return renewToken;
     }
+
+    @Transactional
+    public void removeToken(String tokenCookie){
+        String refreshToken = tokenCookie.split(" ")[1];
+        Token token = jwtRepository.findByRefreshToken(refreshToken).orElseThrow(() -> new CustomException(ErrorCode.REFRESH_TOKEN_NOT_VALID));
+        jwtRepository.delete(token);
+    }
 }

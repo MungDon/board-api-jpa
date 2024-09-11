@@ -17,8 +17,8 @@ import java.util.Optional;
 @Slf4j
 public class CookieUtils {
 
-    private static final String ACCESS_TOKEN_COOKIE_NAME = "Authorization";
-    private static final String REFRESH_TOKEN_COOKIE_NAME = "X-Refresh-Token";
+    public static final String ACCESS_TOKEN_COOKIE_NAME = "Authorization";
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "X-Refresh-Token";
 
     public static Optional<String> getCookie(HttpServletRequest request, String cookieName){
         Cookie[] cookies = request.getCookies();        // 모든 쿠키를 가져옴

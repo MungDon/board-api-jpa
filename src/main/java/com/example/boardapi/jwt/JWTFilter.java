@@ -20,6 +20,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.example.boardapi.util.CookieUtils.ACCESS_TOKEN_COOKIE_NAME;
+import static com.example.boardapi.util.CookieUtils.REFRESH_TOKEN_COOKIE_NAME;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
@@ -31,8 +34,8 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("JWTFilter 발동");
 
-        String accessCookie = CookieUtils.getCookie(request, "Authorization").orElse("");   // 'Authorization' 쿠키 값 == accessToken 쿠키 값
-        String refreshCookie = CookieUtils.getCookie(request, "X-Refresh-Token").orElseThrow(()->
+        String accessCookie = CookieUtils.getCookie(request, ACCESS_TOKEN_COOKIE_NAME).orElse("");   // 'Authorization' 쿠키 값 == accessToken 쿠키 값
+        String refreshCookie = CookieUtils.getCookie(request, REFRESH_TOKEN_COOKIE_NAME).orElseThrow(()->
                 new CustomException(ErrorCode.REFRESH_TOKEN_NOT_VALID)); // 'X-Refresh-Token' 쿠키 값, 없으면 예외 발생
 
         // 가져온 토큰(쿠키)의 유효성검사

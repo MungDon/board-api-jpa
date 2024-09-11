@@ -13,4 +13,6 @@ public class ResComResult{
 
     private String message;
 
+    private Object data;
+
 }
