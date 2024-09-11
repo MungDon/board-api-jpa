@@ -29,7 +29,6 @@ public class MemberService {
                 .password(passwordEncoder.encode(req.getPassword()))
                 .name(req.getName())
                 .role(Role.USER.getRoleName())
-                .createDate()
                 .build();
 
         memberRepository.save(member);
