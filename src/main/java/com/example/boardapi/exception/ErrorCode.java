@@ -17,6 +17,8 @@ public enum ErrorCode {
 	MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 사용자입니다,"),
 	DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 등록된 이메일입니다."),
 
+	IMAGE_NOT_VALID(HttpStatus.BAD_REQUEST,"잘못된 이미지 형식입니다."),
+
 	TOKEN_FORMAT_ERROR(HttpStatus.BAD_REQUEST,"토큰의 형식이 올바르지않습니다."),
 	TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST,"유효하지 않은 토큰입니다."),
 	REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED,"리프레쉬 토큰이 만료되었습니다."),
