@@ -30,6 +30,9 @@ public class Board extends BaseTimeEntity{
     @Column(name="delete_yn")
     private String deleteYn;
 
+    public void saveProcessedContent(String processedContent){
+        this.content = processedContent;
+    }
 
 
 

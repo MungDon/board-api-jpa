@@ -12,6 +12,7 @@ public enum ErrorCode {
 	INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST,"입력 정보 유효성 검증에 실패하였습니다."),
 	UTF8_ENCODING_NOT_SUPPORTED(HttpStatus.BAD_REQUEST,"UTF-8 인코딩이 지원되지 않는 데이터입니다."),
 	USER_AUTHENTICATION_MISSING(HttpStatus.INTERNAL_SERVER_ERROR,"유저 인증 정보 누락"),
+	USER_ENTITY_MISSING(HttpStatus.INTERNAL_SERVER_ERROR,"유저 엔티티 정보 누락"),
 
 	MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 사용자입니다,"),
 	DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 등록된 이메일입니다."),
