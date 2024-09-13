@@ -5,7 +5,6 @@ import com.example.boardapi.entity.Member;
 import com.example.boardapi.enums.DeleteYn;
 import com.example.boardapi.exception.ErrorCode;
 import com.example.boardapi.repository.BoardRepository;
-import com.example.boardapi.repository.ImageRepository;
 import com.example.boardapi.request.board.ReqBoardAdd;
 import com.example.boardapi.response.ResComResult;
 import com.example.boardapi.util.CommonUtils;
@@ -27,6 +26,7 @@ public class BoardService {
                 .member(member)
                 .deleteYn(DeleteYn.D.getCode())
                 .build();
+        boardRepository.save(board);
          String processContent = imageService.processContentWithImages(board,req.getContent());
 
          board.saveProcessedContent(processContent);
