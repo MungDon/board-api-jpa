@@ -45,7 +45,7 @@ public class JWTService {
     public Token getOrCreateToken(HttpServletRequest req, HttpServletResponse res,CustomUserDetail principal){
         Member member = memberRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Token token = jwtRepository.findByMemberSid(member.getMemberSid());
+        Token token = jwtRepository.findByMember(member);
         if(CommonUtils.isEmpty(token)||jwtUtil.isTokenExpired(token.getRefreshToken(), TokenType.REFRESH_TOKEN.getTokenType())){
             return renewToken(req, res, member);
         }

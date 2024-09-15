@@ -36,7 +36,12 @@ public class SecurityConfig {
 
     private final JWTUtil jwtUtil;
     private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
@@ -73,7 +78,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterAt(new LoginFilter(jwtService,authenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(jwtService,authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil,jwtService),LoginFilter.class);
         return http.build();
     }

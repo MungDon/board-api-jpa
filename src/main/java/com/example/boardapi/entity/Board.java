@@ -1,5 +1,6 @@
 package com.example.boardapi.entity;
 
+import com.example.boardapi.request.board.ReqBoardUpdate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class Board extends BaseTimeEntity{
     private String title;
 
     private String content;
-                                            // LAZY(지연로딩) : 실제로 필요한 시점까지 DB 에서 관련데이터를 로딩(조회) 하지않는다
+                                        // LAZY(지연로딩) : 실제로 필요한 시점까지 DB 에서 관련데이터를 로딩(조회) 하지않는다
                                         // 즉 쓸때 없이 join 을 하지않아 성능 향상에 도움
     @ManyToOne(fetch = FetchType.LAZY)  // 반대되는 의미에 EAGER(즉시로딩) 이있다
 
@@ -32,6 +33,11 @@ public class Board extends BaseTimeEntity{
 
     public void saveProcessedContent(String processedContent){
         this.content = processedContent;
+    }
+
+    public void updateBoard(ReqBoardUpdate req){
+        this.title = req.getTitle();
+        this.content = req.getContent();
     }
 
 

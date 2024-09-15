@@ -2,6 +2,7 @@ package com.example.boardapi.entity;
 
 
 import jakarta.persistence.Column;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @SuperBuilder
+@Getter
 public class BaseTimeEntity {
 
     //생성일 자동 

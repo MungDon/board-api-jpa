@@ -19,12 +19,15 @@ public enum ErrorCode {
 
 	IMAGE_NOT_VALID(HttpStatus.BAD_REQUEST,"잘못된 이미지 형식입니다."),
 
+	BOARD_DATA_NOT_FOUND(HttpStatus.BAD_REQUEST,"게시글 정보를 찾을 수 없습니다."),
+
 	TOKEN_FORMAT_ERROR(HttpStatus.BAD_REQUEST,"토큰의 형식이 올바르지않습니다."),
 	TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST,"유효하지 않은 토큰입니다."),
 	REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED,"리프레쉬 토큰이 만료되었습니다."),
 	REFRESH_TOKEN_NOT_VALID(HttpStatus.BAD_REQUEST,"유효하지 않은 리프레쉬 토큰입니다."),
 
 	INSERT_OPERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"저장 작업 실패"),
+	SELECT_OPERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"조회 작업 실패"),
 	UPDATE_OPERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"수정 작업 실패"),
 	DELETE_OPERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"삭제 작업 실패");
 	

@@ -11,11 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 public class AppConfig {
 
-    private final AuthenticationConfiguration configuration;
-    @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return configuration.getAuthenticationManager();
-    }
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
