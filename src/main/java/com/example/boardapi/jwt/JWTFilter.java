@@ -33,7 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("JWTFilter 발동");
-
+        log.info("현재 url : {}",request.getRequestURI()); // swagger ===> 현재 url : /v3/api-docs/swagger-config
         String accessCookie = CookieUtils.getCookie(request, ACCESS_TOKEN_COOKIE_NAME).orElse("");   // 'Authorization' 쿠키 값 == accessToken 쿠키 값
         String refreshCookie = CookieUtils.getCookie(request, REFRESH_TOKEN_COOKIE_NAME).orElseThrow(()->
                 new CustomException(ErrorCode.REFRESH_TOKEN_NOT_VALID)); // 'X-Refresh-Token' 쿠키 값, 없으면 예외 발생
@@ -73,5 +73,10 @@ public class JWTFilter extends OncePerRequestFilter {
     public Boolean isTokenValid(String token){
         return CommonUtils.isEmpty(token) || !token.startsWith("Bearer ");
 
+    }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/api/member/join");
     }
 }

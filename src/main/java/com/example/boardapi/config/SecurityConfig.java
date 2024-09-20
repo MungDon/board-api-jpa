@@ -47,7 +47,10 @@ public class SecurityConfig {
         return web -> web.ignoring().requestMatchers(
                 "/h2-console/**",               // H2 콘솔 접근 허용
                 "/favicon.ico",                 // 파비콘 접근 허용
-                "/error");                       // 에러 페이지 접근 허용
+                "/error",                       // 에러 페이지 접근 허용
+                "/swagger-ui/**",               // Swagger UI 접근 허용
+                "/swagger-resources/**",        // Swagger 리소스 접근 허용
+                "/v3/api-docs/**");             // OpenAPI 문서 접근 허용 // swagger ===> 현재 url : /v3/api-docs/swagger-config
     }
 
     // Security Filter Chain
@@ -74,7 +77,7 @@ public class SecurityConfig {
                         }))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(antMatcher("/api/**")).hasRole("USER")
-                        .requestMatchers(antMatcher("/error, /home")).permitAll()
+                        .requestMatchers(antMatcher("/error, /home, /api/member/join")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
