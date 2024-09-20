@@ -76,8 +76,8 @@ public class SecurityConfig {
                             response.sendRedirect("/home");
                         }))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(antMatcher("/api/**")).hasRole("USER")
-                        .requestMatchers(antMatcher("/error, /home, /api/member/join")).permitAll()
+                        .requestMatchers(antMatcher("/api/board/**")).hasRole("USER")
+                        .requestMatchers(antMatcher("/error, /home")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

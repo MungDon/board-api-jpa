@@ -10,7 +10,7 @@ import lombok.Setter;
 public class ReqSignup{
 
     @NotBlank(message = "이메일은 필수 입니다.")
-    @Pattern(regexp = "/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$/i",
+    @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]+)*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z]+)*\\.[a-zA-Z]{2,3}$",
             message = "이메일 형식에 맞게 입력해주세요.")
     private String email;
 

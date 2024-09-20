@@ -28,7 +28,7 @@ public class MemberService {
                 .email(req.getEmail())
                 .password(passwordEncoder.encode(req.getPassword()))
                 .name(req.getName())
-                .role(Role.USER.getRoleName())
+                .role(Role.USER.getRoleType())
                 .build();
 
         memberRepository.save(member);
