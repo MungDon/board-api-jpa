@@ -73,7 +73,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-        response.sendRedirect(UriComponentsBuilder.fromUriString("/home")
+        response.sendRedirect(UriComponentsBuilder.fromUriString("/api/member/login")
                 .queryParam("error", "로그인 실패")
                 .build()
                 .encode(StandardCharsets.UTF_8)

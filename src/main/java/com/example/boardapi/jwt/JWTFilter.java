@@ -47,6 +47,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // Bearer aasaswudgoqwd~~~
         String accessToken = isTokenValid(accessCookie) ? "" : accessCookie.split(" ")[1] ;
         log.info("accessToken : {}",accessToken);
+
         String refreshToken  = refreshCookie.split(" ")[1];
         log.info("refreshToken : {}",refreshToken);
 

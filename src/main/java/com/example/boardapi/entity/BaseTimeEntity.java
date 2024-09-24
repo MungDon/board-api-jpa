@@ -1,6 +1,7 @@
 package com.example.boardapi.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,12 @@ public class BaseTimeEntity {
     //생성일 자동 
     @CreatedDate
     @Column(name = "created_date")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
     private LocalDateTime createDate;
 
     // 수정일 자동
     @LastModifiedDate
     @Column(name = "modified_date")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
     private LocalDateTime modifiedDate;
 }
