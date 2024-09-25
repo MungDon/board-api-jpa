@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -64,7 +67,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         if (CommonUtils.isEmpty(token)) {
             throw new CustomException(ErrorCode.TOKEN_NOT_VALID);
         }
-        response.sendRedirect(UriComponentsBuilder.fromUriString("/api/board")
+        log.info("오는척하지마");
+        response.sendRedirect(UriComponentsBuilder.fromUriString("/board")
                 .build()
                 .encode(StandardCharsets.UTF_8)
                 .toUriString());
@@ -73,11 +77,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-        response.sendRedirect(UriComponentsBuilder.fromUriString("/api/member/login")
-                .queryParam("error", "로그인 실패")
-                .build()
-                .encode(StandardCharsets.UTF_8)
-                .toUriString());
+        log.info("오는척하지마2");
+        // JSON 응답 객체 생성
+        Map<String, String> jsonResponse = new HashMap<>();
+        jsonResponse.put("message", "로그인 실패");
+
+        // ResponseEntity를 사용하여 JSON 응답 보내기
+        ResponseEntity<Map<String, String>> responseEntity = ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED) // 401 Unauthorized
+                .body(jsonResponse); // JSON 객체
+
+        // JSON 데이터 응답으로 전송
+        response.setStatus(responseEntity.getStatusCodeValue());
+        response.setContentType("application/json");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseEntity.getBody()));
     }
 
 }

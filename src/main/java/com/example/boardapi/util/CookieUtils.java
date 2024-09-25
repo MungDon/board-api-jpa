@@ -58,6 +58,7 @@ public class CookieUtils {
 
         addCookie(req,res,ACCESS_TOKEN_COOKIE_NAME,encodeAccessToken, TokenExpire.ACCESS_TOKEN.getExpiredTime());
         addCookie(req,res,REFRESH_TOKEN_COOKIE_NAME,encodeRefreshToken, TokenExpire.REFRESH_TOKEN.getExpiredTime());
+        log.info("쿠키생성");
     }
 
 
@@ -110,6 +111,7 @@ public class CookieUtils {
 
         // 응답 헤더에 "Set-Cookie"를 추가하여 클라이언트에 쿠키를 설정한다.
         response.addHeader("Set-Cookie", cookie.toString());
+        log.info("쿠키 만들긴함?");
     }
 
     /* 쿠키 삭제 */

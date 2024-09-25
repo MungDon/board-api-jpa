@@ -9,6 +9,7 @@ import com.example.boardapi.jwt.JWTUtil;
 import com.example.boardapi.user.LoginFilter;
 import com.example.boardapi.util.CookieUtils;
 import io.jsonwebtoken.Header;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import static com.example.boardapi.util.CookieUtils.ACCESS_TOKEN_COOKIE_NAME;
 import static com.example.boardapi.util.CookieUtils.REFRESH_TOKEN_COOKIE_NAME;
@@ -59,6 +62,19 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                    @Override
+                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.addAllowedOriginPattern("http://localhost:3000");
+                        config.addAllowedOriginPattern("https://localhost:3000");
+                        config.addAllowedHeader("*");
+                        config.addAllowedMethod("*");
+                        config.setAllowCredentials(true);
+                        config.addExposedHeader("Set-Cookie"); // Set-Cookie 헤더를 노출하도록 추가
+                        return config;
+                    }
+                }))
                 .headers(headerConfigurer -> headerConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //For H2 DB
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -73,11 +89,12 @@ public class SecurityConfig {
                             jwtService.removeToken(refreshCookie);
                             CookieUtils.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
                             CookieUtils.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
-                            response.sendRedirect("/home");
+                            response.sendRedirect("/member/login");
                         }))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(antMatcher("/api/board/**")).hasRole("USER")
                         .requestMatchers(antMatcher("/error, /home")).permitAll()
+                        .requestMatchers(antMatcher("/api/member/login")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

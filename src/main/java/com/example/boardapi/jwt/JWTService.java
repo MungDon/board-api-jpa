@@ -14,11 +14,13 @@ import com.example.boardapi.util.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JWTService {
@@ -43,11 +45,14 @@ public class JWTService {
 
     @Transactional
     public Token getOrCreateToken(HttpServletRequest req, HttpServletResponse res,CustomUserDetail principal){
+        log.info("여기 와야댐");
         Member member = memberRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         Token token = jwtRepository.findByMember(member);
         if(CommonUtils.isEmpty(token)||jwtUtil.isTokenExpired(token.getRefreshToken(), TokenType.REFRESH_TOKEN.getTokenType())){
+            log.info("여기 와야댐");
             return renewToken(req, res, member);
+
         }
         return token;
     }
