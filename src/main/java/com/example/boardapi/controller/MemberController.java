@@ -3,8 +3,6 @@ package com.example.boardapi.controller;
 import com.example.boardapi.request.member.ReqSignup;
 import com.example.boardapi.response.ResComResult;
 import com.example.boardapi.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

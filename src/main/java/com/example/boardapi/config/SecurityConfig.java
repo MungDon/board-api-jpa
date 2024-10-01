@@ -71,7 +71,6 @@ public class SecurityConfig {
                         config.addAllowedHeader("*");
                         config.addAllowedMethod("*");
                         config.setAllowCredentials(true);
-                        config.addExposedHeader("Set-Cookie"); // Set-Cookie 헤더를 노출하도록 추가
                         return config;
                     }
                 }))
