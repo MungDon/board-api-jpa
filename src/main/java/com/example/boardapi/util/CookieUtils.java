@@ -103,8 +103,8 @@ public class CookieUtils {
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .path("/") // 쿠키 적용 경로(도메인 기준)
                 .sameSite("none") // SameSite 속성을 "none"으로 설정 (브라우저 기본값: Lax ==> CSR 에서 쿠키전송 X)
-                .httpOnly(true) // HTTP 통신 이외에는 쿠키에 접근 불가능하도록 설정
-                .secure(true) // HTTPS 가 아닌 프로토콜에서는 쿠키를 전송하지 않게 설정
+  /*              .httpOnly(true) // HTTP 통신 이외에는 쿠키에 접근 불가능하도록 설정
+                .secure(true) // HTTPS 가 아닌 프로토콜에서는 쿠키를 전송하지 않게 설정  테스트를 위해 임시 무효 처리*/
                 .maxAge(maxAge) // 쿠키의 최대 보관 기간을 설정
                 .domain(domain) // 쿠키가 적용될 서버 루트 도메인을 설정
                 .build(); // 쿠키를 빌드하여 생성
