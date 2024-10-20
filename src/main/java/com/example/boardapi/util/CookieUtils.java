@@ -21,10 +21,16 @@ public class CookieUtils {
     public static final String REFRESH_TOKEN_COOKIE_NAME = "X-Refresh-Token";
 
     public static Optional<String> getCookie(HttpServletRequest request, String cookieName){
+        log.info("쿠키 를 가져오거라");
+        log.info(cookieName);
         Cookie[] cookies = request.getCookies();        // 모든 쿠키를 가져옴
-        if(!CommonUtils.isEmpty(cookies)){              // 가져온 쿠기가 있으면 
-            for(Cookie cookie : cookies){                
+        log.info("쿠키 {} ",cookies);
+        if(!CommonUtils.isEmpty(cookies)){              // 가져온 쿠기가 있으면
+            log.info("쿠키있음?");
+            for(Cookie cookie : cookies){
+                log.info("쿠키있음?  : {}", cookie);
                 if(cookie.getName().equals(cookieName)){// 넘겨받은 쿠키의 이름과 일치하는 것을 찾아
+                    log.info("쿠키 찾았ㄴ? : {}", cookie.getValue());
                     return Optional.of(decodeCookie(cookie.getValue()));  // 쿠키의 값을 디코딩 후 반환
                 }
             }
@@ -34,7 +40,7 @@ public class CookieUtils {
 
     public static String decodeCookie(String cookieValue){
         try {
-            return URLDecoder.decode(cookieValue,"UTF-8");
+            return URLDecoder.decode(cookieValue,"UTF-8").replace("+", "%20");
         } catch (UnsupportedEncodingException e) {
             throw new CustomException(ErrorCode.UTF8_ENCODING_NOT_SUPPORTED);
         }
@@ -99,12 +105,14 @@ public class CookieUtils {
                 domain = server_name;
         }
 
+
         // ResponseCookie 객체를 생성하여 쿠키를 설정한다.
+        log.info(domain);
         ResponseCookie cookie = ResponseCookie.from(name, value)
                 .path("/") // 쿠키 적용 경로(도메인 기준)
                 .sameSite("none") // SameSite 속성을 "none"으로 설정 (브라우저 기본값: Lax ==> CSR 에서 쿠키전송 X)
-  /*              .httpOnly(true) // HTTP 통신 이외에는 쿠키에 접근 불가능하도록 설정
-                .secure(true) // HTTPS 가 아닌 프로토콜에서는 쿠키를 전송하지 않게 설정  테스트를 위해 임시 무효 처리*/
+                .httpOnly(true) // HTTP 통신 이외에는 쿠키에 접근 불가능하도록 설정
+                .secure(false) // HTTPS 가 아닌 프로토콜에서는 쿠키를 전송하지 않게 설정  테스트를 위해 임시 무효 처리*/
                 .maxAge(maxAge) // 쿠키의 최대 보관 기간을 설정
                 .domain(domain) // 쿠키가 적용될 서버 루트 도메인을 설정
                 .build(); // 쿠키를 빌드하여 생성

@@ -78,6 +78,6 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return path.startsWith("/api");
+        return path.startsWith("/login"); // 테스트용
     }
 }

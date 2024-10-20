@@ -37,7 +37,7 @@ public class BoardController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ResComResult> boardAdd(@Valid ReqBoardAdd req, @AuthUserData Member member) {
+    public ResponseEntity<ResComResult> boardAdd(@Valid @RequestBody ReqBoardAdd req, @AuthUserData Member member) {
         ResComResult result = boardService.boardAdd(req, member);
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }

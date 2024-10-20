@@ -1,9 +1,11 @@
 package com.example.boardapi.user;
 
+import com.example.boardapi.entity.Member;
 import com.example.boardapi.entity.Token;
 import com.example.boardapi.exception.CustomException;
 import com.example.boardapi.exception.ErrorCode;
 import com.example.boardapi.jwt.JWTService;
+import com.example.boardapi.repository.MemberRepository;
 import com.example.boardapi.util.CommonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -17,11 +19,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final MemberRepository memberRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -58,20 +60,36 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 성공시 실행하는 메소드
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
+        log.info("로그인 성공 메서드 발동");
         CustomUserDetail principal = (CustomUserDetail) authentication.getPrincipal();
         if (CommonUtils.isEmpty(principal)) {
             throw new CustomException(ErrorCode.USER_AUTHENTICATION_MISSING);
         }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Token token = jwtService.getOrCreateToken(request, response, principal);
-        if (CommonUtils.isEmpty(token)) {
+        log.info("권한 {} ", SecurityContextHolder.getContext().getAuthentication());
+
+        Member member = memberRepository.findByEmail(principal.getUsername()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Token token = jwtService.renewToken(request,response,member);
+        if(CommonUtils.isEmpty(token)){
             throw new CustomException(ErrorCode.TOKEN_NOT_VALID);
         }
-        log.info("오는척하지마");
-        response.sendRedirect(UriComponentsBuilder.fromUriString("/board")
-                .build()
-                .encode(StandardCharsets.UTF_8)
-                .toUriString());
+
+        log.info("로그인 성공: {}", principal.getUsername());
+        // 응답 설정
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK); // HTTP 200 OK 상태 코드 설정
+
+        // 로그인 성공 메시지 생성
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "로그인 성공");
+        responseBody.put("status", HttpServletResponse.SC_OK);
+        responseBody.put("success",true);
+
+        // JSON으로 응답 작성
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(responseBody);
+        response.getWriter().write(jsonResponse);
     }
 
     //로그인 실패시 실행하는 메소드

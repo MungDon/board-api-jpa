@@ -6,6 +6,7 @@ import com.example.boardapi.exception.ErrorCode;
 import com.example.boardapi.jwt.JWTFilter;
 import com.example.boardapi.jwt.JWTService;
 import com.example.boardapi.jwt.JWTUtil;
+import com.example.boardapi.repository.MemberRepository;
 import com.example.boardapi.user.LoginFilter;
 import com.example.boardapi.util.CookieUtils;
 import io.jsonwebtoken.Header;
@@ -39,6 +40,7 @@ public class SecurityConfig {
 
     private final JWTUtil jwtUtil;
     private final JWTService jwtService;
+    private final MemberRepository memberRepository;
     private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
@@ -91,13 +93,13 @@ public class SecurityConfig {
                             response.sendRedirect("/member/login");
                         }))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(antMatcher("/api/board/**")).hasRole("USER")
+                        .requestMatchers(antMatcher("/api/board/**")).permitAll()
                         .requestMatchers(antMatcher("/error, /home")).permitAll()
                         .requestMatchers(antMatcher("/api/member/login")).permitAll()
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterAt(new LoginFilter(jwtService,authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(jwtService,authenticationManager(),memberRepository), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil,jwtService),LoginFilter.class);
         return http.build();
     }
