@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
-@EnableJpaAuditing  // JPA Auditing 기능을 활성화하여 엔티티의 생성일 및 수정일 자동 관리
 public class DSLConfig {
 
     @PersistenceContext // EntityManager 를 빈으로 주입받기 위해 사용하는 어노테이션
