@@ -83,8 +83,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 로그인 성공 메시지 생성
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("message", "로그인 성공");
-        responseBody.put("status", HttpServletResponse.SC_OK);
         responseBody.put("success",true);
+        responseBody.put("email",member.getEmail());
+        responseBody.put("role",member.getRole());
 
         // JSON으로 응답 작성
         ObjectMapper objectMapper = new ObjectMapper();

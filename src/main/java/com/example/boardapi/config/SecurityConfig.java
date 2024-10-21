@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -90,7 +92,9 @@ public class SecurityConfig {
                             jwtService.removeToken(refreshCookie);
                             CookieUtils.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
                             CookieUtils.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
-                            response.sendRedirect("/member/login");
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            response.setStatus(HttpStatus.OK.value());
+                            response.getWriter().write("{\"success\": true, \"message\": \"로그아웃 되었습니다\"}");
                         }))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(antMatcher("/api/board/**")).permitAll()
