@@ -8,6 +8,7 @@ import com.example.boardapi.service.BoardService;
 import com.example.boardapi.util.AuthUserData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
@@ -42,7 +43,10 @@ public class BoardController {
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }
     @PutMapping("/update")
-    public ResponseEntity<ResComResult> boardUpdate(ReqBoardUpdate req){
+    public ResponseEntity<ResComResult> boardUpdate(@Valid @RequestBody ReqBoardUpdate req){
+        log.info("tlqkf"+req.getBoardSid());
+        log.info("tlqkf2"+req.getContent());
+        log.info("tlqkf3"+req.getTitle());
         ResComResult result = boardService.boardUpdate(req);
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }

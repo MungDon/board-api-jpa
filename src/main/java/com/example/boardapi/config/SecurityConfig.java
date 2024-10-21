@@ -93,6 +93,7 @@ public class SecurityConfig {
                             CookieUtils.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
                             CookieUtils.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
                             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            response.setCharacterEncoding("UTF-8");
                             response.setStatus(HttpStatus.OK.value());
                             response.getWriter().write("{\"success\": true, \"message\": \"로그아웃 되었습니다\"}");
                         }))
