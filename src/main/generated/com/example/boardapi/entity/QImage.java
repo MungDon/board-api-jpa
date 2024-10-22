@@ -22,11 +22,19 @@ public class QImage extends EntityPathBase<Image> {
 
     public static final QImage image = new QImage("image");
 
+    public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
+
     public final QBoard board;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
     public final StringPath fileName = createString("fileName");
 
     public final NumberPath<Long> imageSid = createNumber("imageSid", Long.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final StringPath uploadUrl = createString("uploadUrl");
 
